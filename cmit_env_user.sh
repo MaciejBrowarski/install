@@ -30,6 +30,9 @@ function get_git
 			# else
 			# 	echo "No found"
 		fi
+		mkdir $FILE/cfg
+		mkdir $FILE/bin
+
 		cp $HOME/install/filec.cfg $HOME/get/$FILE/cfg
         	cp $HOME/install/server.lst $HOME/get/$FILE/cfg
 	done
@@ -95,7 +98,7 @@ function initial
 	ln -s $GET_VER get
 	cd get
 	pwd
-	for DI in backup backup/old cfg idscron log log_perm netbone netbone/bin netbone/cfg pid scripts scripts_admin sms zip; do
+	for DI in backup backup/old cfg idscron log log_perm netbone pid scripts scripts_admin sms zip; do
 		echo "create $DI"
 		mkdir $DI
 	done
