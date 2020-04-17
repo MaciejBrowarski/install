@@ -132,7 +132,7 @@ case $2 in
 		echo "Create $USER"
 		user_add
 		echo "Copy install file for $USER"
-		cp ./install/cmit_env_user.sh $DIR/cmit_env_user.sh
+		cp ./cmit_env_user.sh $DIR/cmit_env_user.sh
 		mkdir $DIR/install
 		mkdir $DIR/install/$HOST
 		echo "Copy initial files to $DIR/install/"
