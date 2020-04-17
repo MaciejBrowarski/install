@@ -23,21 +23,9 @@ USER=$1
 # home dir
 
 case $USER in
-        prla2910)
-        COMM="PROD_LADONIT_2910"
-	USER_ID=2910
-        ;;
-	prma2810)
-	COMM="PROD_MANTAR_2810"
-	USER_ID=2810
-	;;
-        test)
-	COMM="TEST_env"
-	 USER_ID=1001
-        ;;
-	tela3010)
-	COMM="TEST_LADONIT_3010"
-	USER_ID=3010
+	mlea2710)
+	COMM="mLeasing_2710"
+	USER_ID=2710
 	;;
         *)
         echo "not know user name...exit"
@@ -71,7 +59,7 @@ function install_pkg
 {
 	#
 	# for odroid
-	for PKG in  apache2 make bsd-mailx gcc automake autoconf postfix zlib1g-dev bind9-host libnet-dns-perl libnet-ssleay-perl libsoap-lite-perl libwww-curl-perl librrd4 librrds-perl rrdtool libio-socket-ssl-perl libnet-snmp-perl libinline-perl libssl-dev; do
+	for PKG in  apache2 make bsd-mailx gcc automake autoconf zlib1g-dev bind9-host libnet-dns-perl libnet-ssleay-perl libsoap-lite-perl libwww-curl-perl librrd4 librrds-perl rrdtool libio-socket-ssl-perl libnet-snmp-perl libinline-perl libssl-dev; do
 	#
 	# for PKG in apache2 mailx gcc automake1.9 autoconf postfix zlib1g-dev bind9-host libnet-dns-perl libnet-ssleay-perl libsoap-lite-perl libwww-curl-perl librrd4 librrds-perl rrdtool libio-socket-ssl-perl libnet-snmp-perl libinline-perl; do
 		# echo -n "checking $PKG...";
@@ -82,7 +70,7 @@ function install_pkg
 			echo -n "$PKG no installed..."
 			if [ $INSPKG -ne 0 ]; then
 				echo "try to install $PKG"
-				apt-get install $PKG
+				apt-get install -y $PKG
 			else 
 				 echo "";
 			fi
@@ -144,34 +132,34 @@ case $2 in
 		echo "Create $USER"
 		user_add
 		echo "Copy install file for $USER"
-		cp cmit_env_user.sh $DIR/cmit_env_user.sh
+		cp ./install/cmit_env_user.sh $DIR/cmit_env_user.sh
 		mkdir $DIR/install
 		mkdir $DIR/install/$HOST
 		echo "Copy initial files to $DIR/install/"
-		cp install/install_netbone.sh $DIR/install
+		# cp install/install_netbone.sh $DIR/install
 		#
 		# copy *.tar.gz files
 		#
-		for FILE in agent netbone scripts sms scripts_admin idscron watchdog www; do
-			echo -n "coping $FILE..."
-			cp install/$FILE.tar.gz $DIR/install
-			echo "done"
-		done
+		#	for FILE in agent netbone scripts sms scripts_admin idscron watchdog www; do
+		#	echo -n "coping $FILE..."
+		#	cp install/$FILE.tar.gz $DIR/install
+		#	echo "done"
+		# done
 		# personalise cfg file
 		# watchdog, cron, cron.ids
-		for FILE in cron watch.cfg watch-root.cfg idscron.cfg; do
-			echo -n "correct $FILE cfg entry.."
-			cat $USER/$FILE | sed -e "s|USER_ENV|$USER|g" > $DIR/install/$FILE
-			echo "done"
-		done
-
-	 	# host specific cfg file	
-		for FILE in agent.cfg cron; do
-                        echo -n "correct specific for $USER/$HOST/$FILE cfg entry.."
-                        cat $USER/$HOST/$FILE | sed -e "s|USER_ENV|$USER|g" >> $DIR/install/$FILE
-                        echo "done"
-                done
-
+#		for FILE in cron watch.cfg watch-root.cfg idscron.cfg; do
+#			echo -n "correct $FILE cfg entry.."
+#			cat $USER/$FILE | sed -e "s|USER_ENV|$USER|g" > $DIR/install/$FILE
+#			echo "done"
+#		done
+#
+#	 	# host specific cfg file	
+#		for FILE in agent.cfg cron; do
+#                        echo -n "correct specific for $USER/$HOST/$FILE cfg entry.."
+#                        cat $USER/$HOST/$FILE | sed -e "s|USER_ENV|$USER|g" >> $DIR/install/$FILE
+#                        echo "done"
+#                done
+#
 		# specific CFG files 
 		# netbone
 		for FILE in filec.cfg server.lst; do
@@ -187,14 +175,14 @@ case $2 in
 		/bin/su -l -c "$DIR/cmit_env_user.sh init" $USER
 		echo ""
 		echo "Now run $USER install"
-		/bin/su -l -c "$DIR/cmit_env_user.sh unpack" $USER
+		/bin/su -l -c "$DIR/cmit_env_user.sh get_git" $USER
 		echo ""
-                echo "Now run $USER cron"
-                /bin/su -l -c "$DIR/cmit_env_user.sh cron" $USER
+#                echo "Now run $USER cron"
+#                /bin/su -l -c "$DIR/cmit_env_user.sh cron" $USER
 		echo "Create symlink for www"
 		ln -s $DIR/get/www /var/www/$USER
-		echo "chown rrd_png folder for www"
-		chown www-data:www-data $DIR/get/www/rrd_png/
+#		echo "chown rrd_png folder for www"
+#		chown www-data:www-data $DIR/get/www/rrd_png/
 		echo "!! TODO !!: add crontab entries for root"
 		echo "End reached, Please review above logs"
 	;;
@@ -203,6 +191,12 @@ case $2 in
 	;;
 	remove)
 		userdel -r $USER
+	;;
+	cmcore)
+		mv /home/$USER/get/netbone/source/libcmcore.so.1.0.1 /usr/lib
+		ln /usr/lib/libcmcore.so.1.0.1 /usr/lib/libcmcore.so 
+		ln /usr/lib/libcmcore.so.1.0.1 /usr/lib/libcmcore.so.1
+		ldconfig
 	;;
 	*)
 	echo "$0 pkg/pkg-check/pack/install/remove";

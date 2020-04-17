@@ -1,6 +1,7 @@
 #!/bin/bash
 # 0.1 2014 Nov - created
 # 1.0 2016 Dec - add www
+# 2.0 2020 Apr - add git_get to get all software from GIT repository
 #
 # copyright by BROWARSKI
 #
@@ -9,6 +10,31 @@
 
 # only from root
 GET_VER=$HOME/get-4.0
+
+function get_git
+{
+	echo "GET required files from GIT"
+	# for FILE in netbone agent sms idscron scripts scripts_admin watchdog www; do
+	for FILE in netbone; do
+		echo ""
+		echo "--> $FILE start..."
+
+		cd  $HOME/get/
+		git clone https://github.com/MaciejBrowarski/$FILE/
+
+		echo -n "$FILE Makefile..."
+		if [ -f $HOME/get/$FILE/Makefile ]; then
+			echo -n "compile..."
+			make cmcore
+			echo "done"
+			# else
+			# 	echo "No found"
+		fi
+		cp $HOME/install/filec.cfg $HOME/get/$FILE/cfg
+        	cp $HOME/install/server.lst $HOME/get/$FILE/cfg
+	done
+
+}
 
 function unpack_all
 {
@@ -39,9 +65,7 @@ function unpack_all
 	done
 
 	echo "Copy CFG file from install"
-	cp $HOME/install/filec.cfg $HOME/get/netbone/cfg
-        cp $HOME/install/server.lst $HOME/get/netbone/cfg
-
+	
 	cp $HOME/install/install_netbone.sh $HOME/get/
 
 	cp $HOME/install/idscron.cfg $HOME/get/idscron/cfg/	
@@ -71,7 +95,7 @@ function initial
 	ln -s $GET_VER get
 	cd get
 	pwd
-	for DI in backup backup/old cfg idscron log log_perm pid scripts scripts_admin sms zip; do
+	for DI in backup backup/old cfg idscron log log_perm netbone netbone/bin netbone/cfg pid scripts scripts_admin sms zip; do
 		echo "create $DI"
 		mkdir $DI
 	done
@@ -95,6 +119,10 @@ do
     	;;
     	unpack)
 		unpack_all
+    		shift
+    	;;
+    	get_git)
+		get_git
     		shift
     	;;
     	*)
