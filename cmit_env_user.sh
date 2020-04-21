@@ -23,6 +23,7 @@ function get_git
 		git clone https://github.com/MaciejBrowarski/$FILE/
 
 		echo -n "$FILE Makefile..."
+		cd  $HOME/get/$FILE
 		if [ -f $HOME/get/$FILE/Makefile ]; then
 			echo -n "compile..."
 			make cmcore
