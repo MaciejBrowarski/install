@@ -47,7 +47,7 @@ function get_git
 		pwd
 		if [ -f $HOME/get/$FILE/Makefile ]; then
 			echo  "Make version..."
-			./scripts_admin/$FILE version
+			./scripts_admin/$FILE.pl version
 			echo "Make cmcore...";
 			make cmcore
 			echo "done"
