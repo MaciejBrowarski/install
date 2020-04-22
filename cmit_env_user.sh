@@ -103,7 +103,7 @@ function initial
 	ln -s $GET_VER get
 	cd get
 	pwd
-	for DI in backup backup/old cfg idscron log log_perm netbone pid scripts scripts_admin sms zip; do
+	for DI in backup backup/old idscron log log_perm netbone pid scripts scripts_admin sms zip www; do
 		echo "create $DI"
 		mkdir $DI
 	done
