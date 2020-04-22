@@ -16,6 +16,25 @@ function get_git
 	HOST=`uname -n`
 	echo "GET required files from GIT"
 	# for FILE in netbone agent sms idscron scripts scripts_admin watchdog www; do
+	for FILE in scripts_admin scripts; do
+		echo ""
+		echo "--> $FILE start..."
+
+		cd  $HOME/get/
+		git clone https://github.com/MaciejBrowarski/$FILE/
+
+		echo -n "$FILE Makefile..."
+		cd  $HOME/get/$FILE/
+		pwd
+		if [ -f $HOME/get/$FILE/Makefile ]; then
+			echo  "Makefile..."
+			make 
+			echo "done"
+			# else
+			# 	echo "No found"
+		fi
+	done
+
 	for FILE in netbone; do
 		echo ""
 		echo "--> $FILE start..."
@@ -27,7 +46,9 @@ function get_git
 		cd  $HOME/get/$FILE/
 		pwd
 		if [ -f $HOME/get/$FILE/Makefile ]; then
-			echo -n "compile..."
+			echo  "Make version..."
+			./scripts_admin/$FILE version
+			echo "Make cmcore...";
 			make cmcore
 			echo "done"
 			# else
@@ -62,7 +83,7 @@ function unpack_all
 			echo -n "$FILE Makefile..."
 			if [ -f $HOME/get/$FILE/Makefile ]; then
 				echo -n "compile..."
-				make
+				make 
 				echo "done"
 			# else
 			# 	echo "No found"
