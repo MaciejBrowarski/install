@@ -22,6 +22,12 @@ function get_git
 
 		cd  $HOME/get/
 		git clone https://github.com/MaciejBrowarski/$FILE/
+		#
+		# correct modification time of files
+		#
+		cd $HOME/get/$FILE
+		git ls-files | xargs -I{} git log -1 --date=format:%Y%m%d%H%M.%S --format='touch -t %ad "{}"' "{}" | $SHELL
+		cd $HOME/get/
 
 		echo -n "$FILE Makefile..."
 		cd  $HOME/get/$FILE/
@@ -42,12 +48,14 @@ function get_git
 		cd  $HOME/get/
 		git clone https://github.com/MaciejBrowarski/$FILE/
 
+		cd  $HOME/get/$FILE
+		git ls-files | xargs -I{} git log -1 --date=format:%Y%m%d%H%M.%S --format='touch -t %ad "{}"' "{}" | $SHELL
+		cd $HOME/get/
+
 		echo -n "$FILE Makefile..."
 		cd  $HOME/get/$FILE/
 		pwd
 		if [ -f $HOME/get/$FILE/Makefile ]; then
-			echo  "Make version..."
-			../scripts_admin/$FILE.pl version
 			echo "Make cmcore...";
 			make cmcore
 			echo "done"
@@ -55,6 +63,7 @@ function get_git
 			# 	echo "No found"
 		fi
 		pwd
+
 		mkdir bin
 
 		for FILE in filec.cfg server.lst; do

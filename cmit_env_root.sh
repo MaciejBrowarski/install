@@ -193,7 +193,7 @@ case $2 in
 		userdel -r $USER
 	;;
 	cmcore)
-		cp /home/$USER/get/netbone/source/libcmcore.so.1.0.1 /usr/lib
+		mv /home/$USER/get/netbone/source/libcmcore.so.1.0.1 /usr/lib
 
 		if [ -f /usr/lib/libcmcore.so ]; then
 			rm /usr/lib/libcmcore.so
