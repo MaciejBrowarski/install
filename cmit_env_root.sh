@@ -162,11 +162,11 @@ case $2 in
 #
 		# specific CFG files 
 		# netbone
-		for FILE in filec.cfg server.lst; do
-                        echo -n "correct specific for $USER/$HOST/$FILE cfg entry.."
-                        cat $USER/$HOST/cfg/$FILE | sed -e "s|USER_ENV|$USER|g" >> $DIR/install/$FILE
-                        echo "done"
-                done
+#		for FILE in filec.cfg server.lst; do
+#                        echo -n "correct specific for $USER/$HOST/$FILE cfg entry.."
+#                        cat $USER/$HOST/cfg/$FILE | sed -e "s|USER_ENV|$USER|g" >> $DIR/install/$FILE
+#                        echo "done"
+#                done
 
 		# run user script as $USER
 		chown $USER:$USER $DIR/cmit_env_user.sh

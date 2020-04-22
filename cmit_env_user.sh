@@ -13,6 +13,7 @@ GET_VER=$HOME/get-4.0
 
 function get_git
 {
+	HOST=`uname -n`
 	echo "GET required files from GIT"
 	# for FILE in netbone agent sms idscron scripts scripts_admin watchdog www; do
 	for FILE in netbone; do
@@ -23,7 +24,8 @@ function get_git
 		git clone https://github.com/MaciejBrowarski/$FILE/
 
 		echo -n "$FILE Makefile..."
-		cd  $HOME/get/$FILE
+		cd  $HOME/get/$FILE/
+		pwd
 		if [ -f $HOME/get/$FILE/Makefile ]; then
 			echo -n "compile..."
 			make cmcore
@@ -31,11 +33,13 @@ function get_git
 			# else
 			# 	echo "No found"
 		fi
-		mkdir $FILE/cfg
-		mkdir $FILE/bin
+		pwd
+		mkdir bin
 
-		cp $HOME/install/filec.cfg $HOME/get/$FILE/cfg
-        	cp $HOME/install/server.lst $HOME/get/$FILE/cfg
+		for FILE in filec.cfg server.lst; do
+			cat cfg/$FILE.$HOST | sed -e "s|USER_ENV|$USER|g" >> cfg/$FILE
+		done
+
 	done
 
 }
