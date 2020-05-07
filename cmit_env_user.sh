@@ -16,7 +16,7 @@ function get_git
 	HOST=`uname -n`
 	echo "GET required files from GIT"
 	# for FILE in netbone agent sms idscron scripts scripts_admin watchdog www; do
-	for FILE in scripts_admin scripts; do
+	for FILE in idscron scripts_admin scripts; do
 		echo ""
 		echo "--> $FILE start..."
 
